@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public float gravity = 9.81f;
     public float airControl = 10;
     public float sensitivity = 180f;
+    public static bool isJumping = false;
     CharacterController controller;
     Vector3 input, moveDirection;
     [SerializeField]
@@ -21,9 +22,9 @@ public class PlayerMovement : MonoBehaviour
      * For determining which animatiom to play (either noraml cylce, stick cycle or stone cycle (or other))
      */
     [Header("ItemChecker")]
-    bool hasStick = false;
-    bool hasStone = false;
-
+    public static bool hasStick = false;
+    public static bool hasRock = false;
+    public static bool hasSomething = false;
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -48,10 +49,12 @@ public class PlayerMovement : MonoBehaviour
 
             if (Input.GetButton("Jump")) //jump
             {
+                isJumping = true;
                 moveDirection.y = Mathf.Sqrt(2 * jumpHeight * gravity);
             }
             else
             {
+                isJumping = false;
                 moveDirection.y = 0.0f;
             }
         }
@@ -64,5 +67,39 @@ public class PlayerMovement : MonoBehaviour
         moveDirection.y -= gravity * Time.deltaTime; //gravity
 
         controller.Move(moveDirection * Time.deltaTime); //applies movement to character controller
+    }
+
+    public static void collectStick()
+    {
+        hasStick = true;
+    }
+
+    public static void collectRock()
+    {
+        hasRock = true;
+        //increment count if already has stick
+    }
+
+    public static void collectSoemthing()
+    {
+        hasSomething = true;
+    }
+
+    public static void dropStick()
+    {
+        //instatiate the stick back into the world
+        hasStick = false;
+    }
+
+    public static void dropRock()
+    {
+        //instatiate the rock back into the world
+        hasRock = false;
+    }
+
+    public static void dropSomething()
+    {
+        //instatiate the item back into the world
+        hasSomething = false;
     }
 }
