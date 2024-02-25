@@ -34,6 +34,11 @@ public class AnimationController : MonoBehaviour
         rotationObject.transform.rotation = Quaternion.Lerp(rotationObject.transform.rotation, rotation, Time.time * rotationSpeed);
     }
 
+    public void SetGrounded(bool grounded)
+    {
+        anim.SetBool("IsGrounded",grounded);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,6 +64,12 @@ public class AnimationController : MonoBehaviour
             {
                 SetHoldingRock(!anim.GetBool("HasRock"));
             }
+            
         }
+    }
+    private void FixedUpdate()
+    {
+        print(cc.velocity.y);
+        SetGrounded(Mathf.Abs(cc.velocity.y) <= 0.5f);
     }
 }
