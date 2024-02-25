@@ -8,11 +8,14 @@ public class PlayerMovement : MonoBehaviour
     public float jumpHeight = 10;
     public float gravity = 9.81f;
     public float airControl = 10;
+    public float sensitivity = 180f;
     CharacterController controller;
     Vector3 input, moveDirection;
+    [SerializeField]
+    private Transform relDirObj;
     void Start()
     {
-        
+        controller = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
@@ -21,7 +24,10 @@ public class PlayerMovement : MonoBehaviour
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
-        input = (transform.right * moveHorizontal + transform.forward * moveVertical).normalized;
+        Vector3 right = new Vector3(relDirObj.transform.right.x, 0, relDirObj.transform.right.z);
+        Vector3 forward = new Vector3(relDirObj.transform.forward.x, 0, relDirObj.transform.forward.z);
+
+        input = (right * moveHorizontal + forward * moveVertical).normalized;
 
         input *= moveSpeed;
 
@@ -47,5 +53,6 @@ public class PlayerMovement : MonoBehaviour
         moveDirection.y -= gravity * Time.deltaTime;
 
         controller.Move(moveDirection * Time.deltaTime);
+
     }
 }
